@@ -2,9 +2,9 @@ import User from "../models/User.js"
 
 export const create = (req, res) => {
     const newUser = new User({
-        nama_lengkap: req.body.nama_lengkap,
-        asal_sekolah: req.body.asal_sekolah,
-        tahun_lulus: req.body.tahun_lulus,
+        fullname: req.body.fullname,
+        from_school: req.body.from_school,
+        graduation_year: req.body.graduation_year,
         username: req.body.username,
         email: req.body.email,
         password: req.body.password
