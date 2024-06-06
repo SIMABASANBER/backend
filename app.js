@@ -9,7 +9,7 @@ dotenv.config()
 
 app.use(express.json()) // untuk mengirim respon json
 app.use(express.urlencoded({extended: true})) // unutk mengirim data melalui reques body
-app.get('/', (req, res) => res.json({msg:'hello quiz'}))
+app.get('/', (req, res) => res.json({msg:'hello'}))
 app.use('/user', userRoute)
 
 
@@ -27,6 +27,5 @@ connection.getConnection((err) => {
     }
     console.log('Connected to database');
   });
-
 
 
