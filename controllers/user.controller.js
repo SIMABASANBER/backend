@@ -100,7 +100,8 @@ export const findUsername = (req, res) => {
 export const update = (req, res) =>{
     const userData = new User (req.body)
     User.update(req.params.id, userData, (err, data)=>{
-        if(err) {console.log(err);
+        if(err) {
+            console.log(err);
             if(err.type === 'not_found'){
                 res.status(404).send({
                     message: `not found user with id : ${req.params.id}` 

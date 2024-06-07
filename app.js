@@ -4,6 +4,7 @@ import userRoute from "./routes/user.route.js"
 import connection from "./models/connection.js";
 import authRoute from "./routes/auth.route.js";
 
+import questionsRouter from "./routes/question.route.js";
 const app = express();
 dotenv.config()
 
@@ -13,7 +14,7 @@ app.use(express.urlencoded({extended: true})) // unutk mengirim data melalui req
 app.get('/', (req, res) => res.json({msg:'hello'}))
 app.use('/user', userRoute)
 app.use('/auth', authRoute)
-
+app.use('/question', questionsRouter)
 
 
 
