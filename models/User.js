@@ -3,7 +3,7 @@ import sql from'./connection.js'
 const User = function (user){
     this.fullname = user.fullname
     this.from_school = user.from_school
-    this.raduation_year = user.graduation_year
+    this.graduation_year = user.graduation_year
     this.username  = user.username
     this.email = user.email
     this.password = user.password
@@ -117,6 +117,42 @@ User.delete = (id, result) =>{
             return
         }
         result(null, res)
+    })
+}
+
+User.getByUserRegister = (username, result) => {
+    sql.query(`SELECT * FROM ${table} WHERE username = ?`, username, (err, res) => {
+        if(err){
+            result(err, null)
+            return
+        }
+
+        //Jika data ditemukan
+        if(res.length){
+            result(null, res[0])
+            return
+        }
+
+        // Jika data kosong
+        result({type: 'not_found'}, null)
+    })
+}
+
+User.getByUserLogin = (identifier, result) => {
+    sql.query(`SELECT * FROM ${table} WHERE username = ? or email = ?`, [identifier.username, identifier.email], (err, res) => {
+        if(err){
+            result(err, null)
+            return
+        }
+
+        //Jika data ditemukan
+        if(res.length){
+            result(null, res[0])
+            return
+        }
+
+        // Jika data kosong
+        result({type: 'not_found'}, null)
     })
 }
 export default User
