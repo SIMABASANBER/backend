@@ -30,14 +30,6 @@ const roleAccesss = (userRole, endpoint, method) => {
 
     return allowedRolesForMethod.includes(userRole)
 
-    // if(endpoint === '/user' && userRole === 'admin'){
-
-    //     return true
-    // } else {
-    //     return false
-    // }
-
-
 
 }
 
