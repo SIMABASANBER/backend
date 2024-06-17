@@ -68,26 +68,6 @@ User.update = (id, data, result) => {
 }
 
 
-// User.findByUsername = (username, result) => {
-//     const query = `SELECT id, nama_lengkap, asal_sekolah, tahun_lulus, username FROM users WHERE username = ?`;
-//         sql.query(query, [username], (err, res) => {
-//             if (err) {
-//             console.log("error: ", err);
-//             result(err, null);
-//             return;
-//             }
-
-//             if (res.length) {
-//                 console.log("found user: ", res[0]);
-//                 result(null, res[0]);
-//                 return;
-//             }
-
-//              // Not found User with the username
-//              result({ type: 'not_found' }, null);
-//          });
-// }
-
 
 User.findByUsername = (username, result) =>{
     sql.query (`SELECT id, fullname, from_school, graduation_year FROM ${table} WHERE username = ?`,username, (err, res) =>{

@@ -1,7 +1,7 @@
 import User from "../models/User.js"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
+// import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -45,7 +45,7 @@ export const register = async (req, res) => {
     })
 
     console.log(newUser)
-
+    console.log(newUser.password);
     User.create(newUser, (err, data) => {
         if(err) res.status(500).send({msg: "Exist some error"})
         res.send(data)

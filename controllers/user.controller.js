@@ -1,22 +1,53 @@
+import bcrypt from 'bcrypt'
 import User from "../models/User.js"
 
-export const create = (req, res) => {
-    const newUser = new User({
-        fullname: req.body.fullname,
-        from_school: req.body.from_school,
-        graduation_year: req.body.graduation_year,
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
+
+export const create = async (req, res) => {
+
+    // cekk jika username terdaftar
+
+    const userExist = await new Promise((resolve, reject) => {
+        User.getByUserRegister(req.body.username, (err, data) => {
+            if(err) {
+                if(err.type === 'not_found'){
+                    // username belum terdaftar
+                    resolve(false)    
+                } else{
+                    // ada error
+                    reject(err)
+                }
+            } else{
+                // username sudah terdaftar
+                resolve(true)
+            }
+        })
     })
 
+    if (userExist) {
+        return res.status(400).json({message: `Username ${req.body.username} already exist`})
+    }
+
+
+    const encryptPassword = await bcrypt.hash(req.body.password, 10)
+
+    const newUser = new User({
+        fullname: req.body.fullname,
+        username: req.body.username,
+        password: encryptPassword,
+        email: req.body.email,
+        from_school: req.body.from_school,
+        graduation_year: req.body.graduation_year
+    })
+
+    console.log(newUser)
+    console.log(newUser.password);
     User.create(newUser, (err, data) => {
-        if(err){
-            res.status(500).send({msg:"Exist some error"})
-        }
+        if(err) res.status(500).send({msg: "Exist some error"})
         res.send(data)
     })
+
 }
+
 export const findAll = (req, res) =>{
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 2;
@@ -47,24 +78,6 @@ export const findOne = (req, res) =>{
         }
     })
 }
-
-// export const findUsername = (req, res) =>{
-//     User.findByUsername(req.params.username, (err, data) =>{
-//         if(err) {
-//             console.log(err)
-//             if (err.type === 'not_found' ){
-//                 res.status(404).send ({
-//                     message: `not found username :${req.params.username}`
-//                 })
-//                 return
-//             }else {
-//                 res.status(500).send({message: 'exist some error'})
-//             }
-//         }else{
-//             res.send(data)
-//         }
-//     })
-// }
 
 
 export const findUsername = (req, res) => {
