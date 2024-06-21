@@ -135,4 +135,13 @@ User.getByUserLogin = (identifier, result) => {
         result({type: 'not_found'}, null)
     })
 }
+
+User.getTotalUser = (result) => {
+    const query = `SELECT COUNT(*) AS total_user FROM ${table}`;
+    sql.query(query, (err, res) =>{
+        if(err) result(err, null)
+        result(null, res)
+    })
+}
+
 export default User

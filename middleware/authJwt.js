@@ -1,7 +1,7 @@
 import  jwt from "jsonwebtoken"
 import roleAccesss from "./roleAccess.js"
 
-const autJWt = (req, res, next) => {
+const authJWt = (req, res, next) => {
 
     // dapatkan Token
     const token = req.headers['authorization']?.replace("Bearer ", "")
@@ -26,4 +26,4 @@ const autJWt = (req, res, next) => {
 
 }
 
-export default autJWt
+export default authJWt
