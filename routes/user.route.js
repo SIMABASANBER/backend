@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { findAll, findOne, create, update, destroy } from "../controllers/user.controller.js";
-import autJWt from "../middleware/authJwt.js";
+import { findAll, findOne, create, update, destroy, totalUser } from "../controllers/user.controller.js";
+import authJWt from "../middleware/authJwt.js";
 
 const userRouter = Router()
 
-userRouter.use(autJWt)
+userRouter.use(authJWt)
 userRouter.get('/', findAll)
 userRouter.post('/', create)
+userRouter.get('/total', totalUser)
 userRouter.get('/:id', findOne)
 userRouter.put('/:id', update)
 userRouter.delete('/:id', destroy)

@@ -82,3 +82,12 @@ export const destroy = (req, res)=>{
         }
     })
 }
+
+export const totalQuestion = (req, res) => {
+    Questions.getTotalQuestion((err, data) =>{
+        if(err){
+            return res.status(500).send({msg: "Exist some error"})
+        }
+        res.send(data[0])
+    })
+}

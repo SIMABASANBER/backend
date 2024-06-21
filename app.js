@@ -5,9 +5,10 @@ import connection from "./models/connection.js";
 import answerRouter from "./routes/answer.route.js";
 import authRoute from "./routes/auth.route.js";
 import cors from 'cors'
-
 import questionsRouter from "./routes/question.route.js";
 import loggingMiddleware from "./middleware/loggingMiddleware.js";
+import rangkingRouter from "./routes/rangking.route.js";
+
 const app = express();
 dotenv.config()
 app.use(cors());
@@ -16,12 +17,12 @@ app.use(express.json()) // untuk mengirim respon json
 app.use(express.urlencoded({extended: true})) // unutk mengirim data melalui reques body
 
 app.use(loggingMiddleware)
-
 app.get('/', (req, res) => res.json({msg:'hello'}))
 app.use('/user', userRoute)
 app.use('/auth', authRoute)
 app.use('/question', questionsRouter)
 app.use('/answer', answerRouter)
+app.use('/rangking', rangkingRouter)
 
 
 
