@@ -1,55 +1,90 @@
-import Answer from "../models/answer.js"
+import Answer from "../models/answer.js";
+import Question from "../models/questions.js"
 
-export const findAll = (req, res) => {
-    console.log(req.userId)
-    Answer.getAll((err, data) => {
-        if(err){ 
-            console.log(err)
-            res.status(500).send({msg: "exist some error"})
-        }
-        res.send(data)
-    })
-}
-  
-export const findOne = (req, res)=>{
-    Answer.findById(req.params.id, (err, data)=>{
-        if(err) {
-            if(err.type === 'not_found'){
-                res.status(404).send({
-                    messagge: `not found question with id : ${req.params.id}`
-                })
-                return
-            }else{
-                res.status(500).send({msg:"exist some error"})
-            }
-        }else{
-            res.send(data)
-        }
-          
-    })
-}
 
-let pointBenar = 0;
-export const checkAnswer = (req, res)=>{
-    const {answerUser} = req.body;
-    Answer.findById(req.params.id, (err, data)=>{
-        if(err) {
-            if(err.type === 'not_found'){
-                res.status(404).send({
-                    messagge: `not found question with id : ${req.params.id}`
-                })
-                return
-            }else{
-                res.status(500).send({msg:"exist some error"})
-            }
-            console.log(data.correct_answer);
-        }if (answerUser === data.correct_answer) {
-            pointBenar+=10;
-            res.json({msg:"Jawaban Benar"})
+export const checkAnswer = (req, res) => {
+    const { answerUser} = req.body;
+    const userId = req.userId; 
+
+    //mengambil jumlah total soal dari tabel question
+
+    Question.countQuestions((err, totalQuestions) => {
+        if (err) {
+            res.status(500).send({ msg: "Error counting questions" });
+            return;
+        }
+
+    const pointsPerQuestion = 100 / totalQuestions;
+    console.log(req.userId);
+    Answer.findById([req.params.id], (err, results) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ msg: "exist some error" });
+            return;
+        }
+        if (results.length === 0) {
+            res.status(404).send({
+                message: `not found question with id: ${req.params.id}`
+            });
+            return;
+        }
+
+        let pointBenar = 0;
+
+        if (answerUser === results.correct_answer) {
+            pointBenar += pointsPerQuestion;
+            res.json({ msg: "Jawaban Benar" });
         } else {
-            res.json({msg:"Jawban Salah"})
+            res.json({ msg: "Jawban Salah" });
         }
-        console.log(pointBenar)
-    })
-    
+
+        Answer.findByUserId(userId, (err, result) => {
+            console.log(userId);
+            if (err) {
+                res.status(500).send({ msg: "Error retrieving user result" });
+                return;
+            }
+
+            let newScore = pointBenar;
+            let grade = '';
+
+            if (result) {
+                newScore += result.nilai;
+                // grade = newScore >= 80 ? 'A' : result.grade;
+                if (newScore > 90) {
+                    grade = 'A';
+                } else if (newScore > 70) {
+                    grade = 'B';
+                } else {
+                    grade = 'C';
+                }
+
+                Answer.update(result.id, newScore, grade, (err, updatedResult) => {
+                    if (err) {
+                        res.status(500).send({ msg: "Error updating user result" });
+                        return;
+                    }
+                    console.log(updatedResult);
+                });
+            } else {
+                // grade = newScore >= 30 ? 'A' : '';
+                if (newScore > 90) {
+                    grade = 'A';
+                } else if (newScore > 70) {
+                    grade = 'B';
+                } else {
+                    grade = 'C';
+                }
+
+                Answer.create(userId, newScore, grade, (err, savedResult) => {
+                    if (err) {
+                        res.status(500).send({ msg: "Error saving user result" });
+                        return;
+                    }
+                    console.log(savedResult);
+                });
+            }
+        });
+    });
+});
 }

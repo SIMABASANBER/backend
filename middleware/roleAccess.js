@@ -4,6 +4,7 @@ const roleAccesss = (userRole, endpoint, method) => {
         '/user': {
             GET: ['admin'],
             POST: ['admin'],
+            PUT: ['admin'],
             DELETE: ['admin'],
         },
         '/question': {
@@ -13,13 +14,11 @@ const roleAccesss = (userRole, endpoint, method) => {
             DELETE: ['admin'],
         },
         '/answer': {
-            GET: ['admin'],
             POST: ['admin', 'user'],
-            UPDATE: ['admin'],
-            DELETE: ['admin'],
+            
         },
         '/rangking': {
-            GET: ['admin']
+            GET: ['admin'],
         }
     }
 

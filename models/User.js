@@ -19,19 +19,19 @@ User.create = (newUser, result) =>{
     })
 }
 
-User.getAll = (page, pageSize, result) =>{
-    const offset = (page -1) * pageSize;
-    console.log(`Page: ${page}, PageSize: ${pageSize}, Offset: ${offset}`);
-    const query = `SELECT id, fullname, from_school, graduation_year, username FROM ${table} WHERE role = 'user' LIMIT ?,?`
-    sql.query(query, [offset, pageSize], (err, res)=>{
-        if (err){
+
+User.getAll =(result) => {
+    sql.query(`SELECT id, fullname, from_school, graduation_year, username, email FROM ${table} WHERE role = 'user' `, (err, res) => {    
+        if(err) {
             result(err, null)
         }result(null, res)
     })
 }
 
+
+
 User.findById = (id, result) => {
-    sql.query(`SELECT id, fullname, from_school, graduation_year, username FROM ${table} WHERE id = ${id}`, (err, res) => {
+    sql.query(`SELECT id, fullname, from_school, graduation_year, username, email FROM ${table} WHERE id = ${id}`, (err, res) => {
         if (err) {
             result(err, null)
             return
@@ -67,23 +67,6 @@ User.update = (id, data, result) => {
         })
 }
 
-
-
-User.findByUsername = (username, result) =>{
-    sql.query (`SELECT id, fullname, from_school, graduation_year FROM ${table} WHERE username = ?`,username, (err, res) =>{
-        if (err){
-            result(err,null)
-            return
-        }
-        //jika data ditemukan
-        if(res.lenght){
-            result(null, res[0])
-            return
-        }
-        //jika kosong
-        result({type: 'not_found'})
-    })
-}
 
 User.delete = (id, result) =>{
     sql.query(`DELETE FROM ${table} WHERE id = ?`, id, (err, res)=>{

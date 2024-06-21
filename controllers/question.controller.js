@@ -18,12 +18,10 @@ export const create = (req, res) =>{
     })
 }
 
-export const findAll = (req, res)=>{
-    const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 5;
 
-    Questions.getAll(page, pageSize, (err, data)=>{
-        if (err){
+export const findAll = (req, res) => {
+    Questions.getAll((err, data) => {  
+        if(err){
             console.log(err)
             res.status(500).send({msg: "exist some error"})
         }
@@ -89,5 +87,14 @@ export const totalQuestion = (req, res) => {
             return res.status(500).send({msg: "Exist some error"})
         }
         res.send(data[0])
+    })
+}
+export const getAllQuestionAdmin = (req, res) =>{
+    Questions.getAllQuestionAdmin((err, data) => {
+        if(err){
+            console.log(err)
+            res.status(500).send({msg: "exist some error"})
+        }
+        res.send(data)
     })
 }

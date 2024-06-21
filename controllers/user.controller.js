@@ -48,12 +48,9 @@ export const create = async (req, res) => {
 
 }
 
-export const findAll = (req, res) =>{
-    const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 2;
-
-    User.getAll(page, pageSize, (err, data)=>{
-        if (err){
+export const findAll = (req, res) => {
+    User.getAll((err, data) => {  
+        if(err){
             console.log(err)
             res.status(500).send({msg: "exist some error"})
         }
