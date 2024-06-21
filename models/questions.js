@@ -20,12 +20,20 @@ Questions.create = (newQuestions, result) =>{
     })
 }
 
-Questions.getAll = (page, pageSize, result) =>{
-    const offset = (page -1) * pageSize;
-    console.log(`Page: ${page}, PageSize: ${pageSize}, Offset: ${offset}`);
-    const query = `SELECT id, title,  choise_a, choise_b, choise_c, choise_d FROM ${table} LIMIT ?,?`
-    sql.query(query, [offset, pageSize], (err, res)=>{
-        if (err){
+Questions.countQuestions =(result) => {
+    sql.query('SELECT COUNT(*) AS total_questions FROM questions', (err, results) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        result(null, results[0].total_questions);
+    });
+}
+
+
+Questions.getAll =(result) => {
+    sql.query(`SELECT id, title,  choise_a, choise_b, choise_c, choise_d FROM ${table}`, (err, res) => {    
+        if(err) {
             result(err, null)
         }result(null, res)
     })
@@ -81,5 +89,20 @@ Questions.delete = (id, result) =>{
         result(null, res)
     })
 }
+
+Questions.getTotalQuestion = (result) => {
+    const query = `SELECT COUNT(*) AS total_question FROM ${table}`;
+    sql.query(query, (err, res) =>{
+        console.log(err);
+    })
+}
+
+Questions.getAllQuestionAdmin = (result) => {
+    sql.query(`SELECT id, title,  choise_a, choise_b, choise_c, choise_d, correct_answer FROM ${table}`,(err, res) => {
+        if(err) result(err, null)
+        result(null, res)
+    })
+}
+
 
 export default Questions
