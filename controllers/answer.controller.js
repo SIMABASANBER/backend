@@ -6,7 +6,7 @@ export const checkAnswer = (req, res) => {
     const { answerUser} = req.body;
     const userId = req.userId; 
 
-    //mengambil jumlah total soal dari tabel qeustion
+    //mengambil jumlah total soal dari tabel question
 
     Question.countQuestions((err, totalQuestions) => {
         if (err) {
