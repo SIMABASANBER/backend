@@ -93,7 +93,8 @@ Questions.delete = (id, result) =>{
 Questions.getTotalQuestion = (result) => {
     const query = `SELECT COUNT(*) AS total_question FROM ${table}`;
     sql.query(query, (err, res) =>{
-        console.log(err);
+        if(err) result(err, null)
+        result(null, res)
     })
 }
 
