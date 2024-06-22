@@ -6,7 +6,7 @@ const Rangking = function (rangking){
 }
 
 Rangking.getRangking = (result) => {
-    const query = `SELECT users.fullname, users.username, users.email, result.nilai, result.grade FROM result JOIN users ON result.user_id = users.id ORDER BY result.nilai DESC`;
+    const query = `SELECT users.fullname, users.username, users.email, users.from_school, result.nilai, result.grade FROM result JOIN users ON result.user_id = users.id ORDER BY result.nilai DESC`;
     sql.query(query, (err, res) =>{
         if(err) result(err, null)
         result(null, res)
