@@ -13,7 +13,16 @@ import rangkingRouter from "./routes/rangking.route.js";
 
 const app = express();
 dotenv.config()
-app.use(cors());
+
+//konfigurasi Cors
+const corsOption = {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-type', 'Authorization']
+
+}
+
+app.use(cors(corsOption));
 
 app.use(express.json()) // untuk mengirim respon json
 app.use(express.urlencoded({extended: true})) // unutk mengirim data melalui reques body
